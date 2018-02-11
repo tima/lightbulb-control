@@ -1,0 +1,9 @@
+*#
+*~
+venv/
+.vagrant/
+*deb
+*rpm
+scratch/
+.bundle/
+TODO
