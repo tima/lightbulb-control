@@ -1,2 +1,4 @@
 ---
 # vars file for lightbulb-control
+lightbulb_epel_name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+lightbulb_control_user_home_path: /home/{{ username }}

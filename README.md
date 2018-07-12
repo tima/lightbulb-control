@@ -1,38 +1,58 @@
-Role Name
+lightbulb-control
 =========
 
-A brief description of the role goes here.
+Sets up a Red Hat Enterprise Linux 7 or CentOS 7 base node for use as the controller in an Ansible Lightbulb lab environment.
+
+This role will:
+
+* Ensures the EPEL repository has been enabled
+* Ensures the latest version of useful command line tools are present
+    * vim
+    * git
+    * wget
+    * nano
+    * sshpass
+* (Optionally) Ensures the latest version of Ansible is present
+* Ensures a clone of the ansible/lightbulb content is in user home
+* Configures ansible and vim
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Fact gathering should have been run on the host.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+* *username*: This *required* variable contains a string with the student username that will be using the node in their lab. This variable is typically elsewhere using `set_fact` while provisioning or as a host variable in more static environments.
+
+* *control_node_inventory_path*: This variable is defines the absolute path of the lab's static inventory file. The default is `/home/{{ username }}/inventory.ini`.
+
+* *control_node_install_ansible*: A boolean value that controls if the role should pre-install install ansible. The variable defaults to "false".
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+The lightbulb-common-linux role (or similar tasks) should have been executed to prepare the node.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+---
+- hosts: control
+  vars:
+    username: lightbulb
+  roles:
+    - lightbulb-control
+```
 
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+This role has been developed as part of the [Ansible Lightbulb project](https://github.com/ansible/lightbulb).

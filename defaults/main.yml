@@ -1,2 +1,5 @@
 ---
 # defaults file for lightbulb-control
+lightbulb_control_install_ansible: false
+lightbulb_control_inventory_path: "{{ lightbulb_control_user_home_path}}/inventory.ini"
+# this ^^^ one is needed for inventory generation AND config file

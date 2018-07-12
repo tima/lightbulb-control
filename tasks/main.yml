@@ -1,2 +1,52 @@
 ---
 # tasks file for lightbulb-control
+- name: Ensures the EPEL repository has been enabled
+  yum:
+    name: "{{ lightbulb_epel_name }}"
+    state: present
+
+- name: Ensures the latest version of useful command line tools are present
+  yum:
+    name:
+      - vim
+      - git
+      - wget
+      - nano
+      - sshpass
+    state: latest
+    # WHY TESTING?
+    enablerepo: epel-testing
+
+- name: Ensures the latest version of Ansible is present
+  yum:
+    name: ansible
+    state: latest
+    # enablerepo: rhui-REGION-rhel-server-extras
+  when: lightbulb_control_install_ansible
+
+- name: Clone lightbulb
+  git:
+    accept_hostkey: yes
+    clone: yes
+    dest: "{{ lightbulb_control_user_home_path }}/lightbulb"
+    repo: https://github.com/ansible/lightbulb.git
+    force: yes
+  become_user: "{{ username }}"
+
+- name: Installs default configuration files in home directory
+  template:
+    src: "{{ item }}"
+    dest: "{{ lightbulb_control_user_home_path }}/.{{ (item | splitext)[0] }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+  with_items:
+    - ansible.cfg.j2
+    - vimrc.j2
+
+# - name: Put student inventory in proper spot
+#   copy:
+#     src: ./{{ username }}-instances.txt
+#     dest: "{{ control_node_inventory_path }}"
+#     owner: "{{ username }}"
+#     group: "{{ username }}"
+#   when: username in inventory_hostname
